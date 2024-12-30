@@ -2,54 +2,116 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Not Hesaplama Sistemi</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
             background-color: #f4f4f4;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
+
         .container {
             background-color: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
         }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
         input, button {
             width: 100%;
             margin: 10px 0;
-            padding: 10px;
-            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
         }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
         #sonuc {
             margin-top: 20px;
-            padding: 10px;
+            padding: 15px;
             border-radius: 5px;
             white-space: pre-wrap;
+            font-size: 16px;
+            line-height: 1.5;
         }
+
         .basarili { background-color: #dff0d8; color: #3c763d; }
         .basarisiz { background-color: #f2dede; color: #a94442; }
         .sinirda { background-color: #f0ad4e; color: white; }
         .oneri { background-color: #d9edf7; color: #31708f; }
+
         #footer {
+            text-align: center;
+            padding: 20px;
             font-size: 14px;
             font-weight: bold;
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
             color: #31708f;
+            margin-top: auto;
             display: none;
             animation: fadeIn 3s forwards;
         }
+
         @keyframes fadeIn {
-            0% {
-                opacity: 0;
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Mobile Styles */
+        @media screen and (max-width: 480px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+                margin: 10px auto;
             }
-            100% {
-                opacity: 1;
+
+            h2 {
+                font-size: 20px;
+            }
+
+            input, button {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            #sonuc {
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            #footer {
+                font-size: 12px;
+                padding: 15px;
             }
         }
     </style>
@@ -68,46 +130,34 @@
 
     <script>
         function notHesapla() {
-            // Input elemanlarını al
             const vizeInput = document.getElementById('vizeNotu');
             const sonucDiv = document.getElementById('sonuc');
-
-            // Notları al
             const vize = parseFloat(vizeInput.value);
 
-            // Geçerlilik kontrolleri
             if (isNaN(vize) || vize < 0 || vize > 100) {
                 sonucDiv.innerHTML = 'Lütfen 0-100 arasında geçerli bir vize notu girin!';
                 sonucDiv.className = 'basarisiz';
                 return;
             }
 
-            // Final notu için gereken minimum notları hesapla
             const minFinal50 = (50 - (vize * 0.4)) / 0.6;
             const minFinal45 = (45 - (vize * 0.4)) / 0.6;
 
             let mesaj = '';
             let sinif = '';
 
-            // Vize notu bilgilendirmesi
             mesaj += `🔢 Vize Notunuz: ${vize}\n\n`;
 
-            // Vize notu 50'nin altında ise detaylı hesaplama
             if (vize < 50) {
-                // Final notu gereksinimleri
                 mesaj += `📊 50 Geçme Notu İçin:\n`;
                 mesaj += `   • Finalden en az ${minFinal50.toFixed(2)} almanız gerekiyor.\n\n`;
-                
                 mesaj += `🔍 Şartlı Geçiş (45-50 arası) İçin:\n`;
                 mesaj += `   • Finalden ${minFinal45.toFixed(2)} - ${minFinal50.toFixed(2)} arasında not almanız gerekiyor.\n\n`;
-
                 mesaj += '⚠️ Vize notunuz düşük! Finalden çok yüksek not almanız gerekiyor.\n';
                 sinif = 'basarisiz';
-
                 mesaj += '❗ DİKKAT: Final notunuz 50\'nin altında ise KALACAKSINIZ!\n\n';
                 mesaj += '💡 İPUCU: Yüksek final notu için çalışmaya devam edin!';
             } else {
-                // Vize notu 50 ve üzeri ise övgü mesajı
                 mesaj += '🌟 Tebrikler! Vize notunuz yüksek.\n';
                 mesaj += '💡 Başarınızı daha da artırmak için çalışmaya devam edin!';
                 sinif = 'oneri';
@@ -116,7 +166,6 @@
             sonucDiv.innerHTML = mesaj;
             sonucDiv.className = sinif || 'sinirda';
 
-            // Footer animasyonunu başlat
             const footer = document.getElementById('footer');
             footer.style.display = 'block';
         }
