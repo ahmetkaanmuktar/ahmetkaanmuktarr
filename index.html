@@ -16,6 +16,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
         }
         input, button {
             width: 100%;
@@ -44,6 +45,17 @@
             display: none;
             animation: fadeIn 3s forwards;
         }
+        #counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #31708f;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
         @keyframes fadeIn {
             0% {
                 opacity: 0;
@@ -56,6 +68,7 @@
 </head>
 <body>
     <div class="container">
+        <div id="counter">Hesaplama #0</div>
         <h2>Not Hesaplama Sistemi</h2>
         <input type="number" id="vizeNotu" placeholder="Vize Notu (0-100)" min="0" max="100">
         <button onclick="notHesapla()">Notu Hesapla</button>
@@ -67,7 +80,13 @@
     </div>
 
     <script>
+        let hesaplamaCount = 0;
+        
         function notHesapla() {
+            // Sayacı artır
+            hesaplamaCount++;
+            document.getElementById('counter').textContent = `Hesaplama #${hesaplamaCount}`;
+
             // Input elemanlarını al
             const vizeInput = document.getElementById('vizeNotu');
             const sonucDiv = document.getElementById('sonuc');
